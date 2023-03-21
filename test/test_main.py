@@ -19,18 +19,16 @@ def test_main(
 ):
     context_1 = Mock()
     cm.return_value = get_mock_context_manager(context_1)
-    main()
+    main(open_context)
     open_context.assert_called_with(context_1)
 
 
-@patch('yucky_context.src.write_context')
-def test_open_context(
-    write_context: MagicMock,
-):
+def test_open_context():
     context_2 = Mock()
     context = Mock(spec_set=['open'])
     context.open.return_value = get_mock_context_manager(context_2)
-    open_context(context)
+    write_context = Mock()
+    open_context(write_context, context)
     write_context.assert_called_with(context_2)
 
 

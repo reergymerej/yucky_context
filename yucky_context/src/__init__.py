@@ -27,7 +27,14 @@ class ContextManager1(ContextManager):
         return Context1()
 
 
+def write_context(context):
+    context.write(1234)
+
+
+def open_context(context):
+        with context.open() as opened_context:
+            write_context(opened_context)
+
 def main():
-    with ContextManager1() as context_1:
-        with context_1.open() as context_2:
-            context_2.write(1234)
+    with ContextManager1() as context:
+        open_context(context)

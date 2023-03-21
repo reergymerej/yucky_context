@@ -11,11 +11,7 @@ def get_mock_context_manager(context) -> Mock:
     return mock
 
 
-@patch(
-    'yucky_context.src.ContextManager1',
-    # no magic
-    new_callable=Mock,
-)
+@patch('yucky_context.src.ContextManager1', new_callable=Mock)
 def test_main(
     ContextManagerCallable: Mock,
 ):

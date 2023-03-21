@@ -9,7 +9,6 @@ class ContextManager:
 class Context2():
     def write(self, num):
         print('writing', num)
-        return None
 
 
 class ContextManager2(ContextManager):
@@ -32,8 +31,9 @@ def write_context(context):
 
 
 def open_context(context):
-        with context.open() as opened_context:
-            write_context(opened_context)
+    with context.open() as opened_context:
+        write_context(opened_context)
+
 
 def main():
     with ContextManager1() as context:

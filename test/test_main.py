@@ -1,5 +1,5 @@
-from yucky_context.src import main
-from unittest.mock import Mock, patch
+from yucky_context.src import main, open_context
+from unittest.mock import MagicMock, Mock, patch
 
 def get_mock_context_manager(context) -> Mock:
     """
@@ -24,3 +24,16 @@ def test_main(
 
     main()
     context_2.write.assert_called_with(1234)
+
+
+@patch('yucky_context.src.write_context')
+def test_open_context(
+    write_context: MagicMock,
+):
+    context_2 = Mock()
+    context = Mock(spec_set=['open'])
+    context.open.return_value = get_mock_context_manager(context_2)
+
+    open_context(context)
+    write_context.assert_called_with(context_2)
+

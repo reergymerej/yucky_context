@@ -1,4 +1,4 @@
-from yucky_context.src import main, open_context
+from yucky_context.src import main, open_context, write_context
 from unittest.mock import MagicMock, Mock, patch
 
 def get_mock_context_manager(context) -> Mock:
@@ -11,19 +11,16 @@ def get_mock_context_manager(context) -> Mock:
     return mock
 
 
+@patch('yucky_context.src.open_context')
 @patch('yucky_context.src.ContextManager1', new_callable=Mock)
 def test_main(
-    ContextManagerCallable: Mock,
+    cm: Mock,
+    open_context: MagicMock,
 ):
-    context_2 = Mock(spec_set=['write'])
-    ContextManager2 = get_mock_context_manager(context_2)
-    context_1 = Mock(spec_set=['open'])
-    context_1.open.return_value = ContextManager2
-    ContextManager1 = get_mock_context_manager(context_1)
-    ContextManagerCallable.return_value = ContextManager1
-
+    context_1 = Mock()
+    cm.return_value = get_mock_context_manager(context_1)
     main()
-    context_2.write.assert_called_with(1234)
+    open_context.assert_called_with(context_1)
 
 
 @patch('yucky_context.src.write_context')
@@ -33,7 +30,12 @@ def test_open_context(
     context_2 = Mock()
     context = Mock(spec_set=['open'])
     context.open.return_value = get_mock_context_manager(context_2)
-
     open_context(context)
     write_context.assert_called_with(context_2)
+
+
+def test_write_context():
+    context = Mock(spec_set=['write'])
+    write_context(context)
+    context.write.assert_called_with(1234)
 

@@ -1,0 +1,12 @@
+[run]
+source = yucky_context/src
+
+branch = True
+
+[report]
+exclude_lines =
+    if __name__ == .__main__.:
+    pass
+
+show_missing = True
+
